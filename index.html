@@ -7,16 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
-        #appsScriptIframe {
-            width: 100%;
-            height: 810px;
-            border: none;
-            overflow: hidden;
-        }
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden; /* Disable scroll */
+            touch-action: none; /* Prevent touch scrolling on mobile */
         }
+
+        #appsScriptIframe {
+            width: 100%;
+            height: 100vh; /* Full viewport height for the iframe */
+            border: none;
+        }
+
         .marquee {
             position: absolute;
             white-space: nowrap;
@@ -41,7 +45,6 @@
             position: absolute;
             width: 30px;
             cursor: pointer;
-            display: inline-block;
         }
 
         .bar {
@@ -162,7 +165,7 @@
             <i class="fas fa-shopping-bag"></i>
             <span>resto</span>
         </a>
-        <a href="https://example.com/mall">
+        <a href="javascript:void(0);" onclick="openkasir()">
             <i class="fas fa-store"></i>
             <span>kasir</span>
         </a>
@@ -185,6 +188,20 @@
             const laporanUrl = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
             const iframe = document.getElementById("appsScriptIframe");
             iframe.src = laporanUrl; // Load URL inside iframe
+           
+           const kasirUrl = `https://script.google.com/macros/s/AKfycbweri5OOWwmqnmbtBvFivshKwoDC35YGgofvgAUTIYmPXcoB2NsRKPyqB66z8o5nbkw/exec?items=${encodeURIComponent(items)}`;
+           iframe.src = kasirUrl; // Load URL inside iframe
+
+        }
+   
+          function openkasir() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
+
+            const iframe = document.getElementById("appsScriptIframe");
+           const kasirUrl = `https://script.google.com/macros/s/AKfycbweri5OOWwmqnmbtBvFivshKwoDC35YGgofvgAUTIYmPXcoB2NsRKPyqB66z8o5nbkw/exec?items=${encodeURIComponent(items)}`;
+           iframe.src = kasirUrl; // Load URL inside iframe
+
         }
 
         // Function to toggle the menu
@@ -241,6 +258,5 @@
             iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
         };
     </script>
-
 </body>
 </html>
