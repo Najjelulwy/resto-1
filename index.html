@@ -29,52 +29,12 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(200%); }
         }
-        /* QR Code style */
-        #qrcode {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 128px;
-            height: 128px;
+
+        /* Menu hamburger and bottom navigation */
+        .hamburger, .bottom-nav {
+            display: none; /* Default hidden */
         }
-    
-        /* Container for bottom navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px); /* Adds blur effect */
-        }
-        /* Each navigation item */
-        .bottom-nav a, .bottom-nav button {
-            text-align: center;
-            text-decoration: none;
-            color: #666;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-        /* Styling for active item */
-        .bottom-nav a.active, .bottom-nav button.active {
-            color: #1d4ed8;
-        }
-        /* Icon size */
-        .bottom-nav i {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-    
+
         .hamburger {
             margin-left: 5px;
             margin-top: 15px;
@@ -131,12 +91,49 @@
         .menu.active {
             transform: translateX(0); /* Slide in the menu */
         }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px); /* Adds blur effect */
+        }
+
+        .bottom-nav a, .bottom-nav button {
+            text-align: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .bottom-nav i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .bottom-nav a.active, .bottom-nav button.active {
+            color: #1d4ed8;
+        }
     </style>
 </head>
 <body>
     <div class="marquee">copy right hafizkid 2024</div>
     <!-- Hamburger Icon -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
@@ -155,63 +152,8 @@
     <!-- Iframe for the Google Apps Script Web App -->
     <iframe id="appsScriptIframe" src="" scrolling="no"></iframe>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  
-    <script>
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
-            const meja = urlParams.get("meja") || "default";  // Default value if not specified
-
-            // Generate the iframe URL with parameters
-            const iframe = document.getElementById("appsScriptIframe");
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
-            iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
-        };
-    </script>
-
-    <script>
-        let autoCloseTimeout;
-
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            menu.classList.toggle("active"); // Toggle the 'active' class
-            
-            // If menu is active, set a timer to auto-close after 5 seconds (5000 ms)
-            if (menu.classList.contains("active")) {
-                resetAutoClose(); // Reset timer when clicked
-            }
-        }
-
-        function resetAutoClose() {
-            // Clear the previous timeout if it exists
-            clearTimeout(autoCloseTimeout);
-            
-            // Set a new timeout to close the menu after 5 seconds of inactivity
-            autoCloseTimeout = setTimeout(function() {
-                var menu = document.getElementById("menu");
-                menu.classList.remove("active");
-            }, 5000); // 5000 ms = 5 seconds
-        }
-
-        // Optional: Close the menu when user clicks outside of the menu
-        document.addEventListener('click', function(event) {
-            var menu = document.getElementById("menu");
-            var hamburger = document.querySelector(".hamburger");
-            
-            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
-                menu.classList.remove("active");
-            }
-        });
-
-        // Optional: Reset the auto-close timer when hovering over the menu
-        document.getElementById("menu").addEventListener('mouseover', function() {
-            resetAutoClose();
-        });
-    </script>
-
     <!-- Bottom Navigation -->
-    <div class="bottom-nav">
+    <div class="bottom-nav" id="bottomNav">
         <a href="https://example.com/beranda" class="active">
             <i class="fas fa-home"></i>
             <span>Beranda</span>
@@ -245,11 +187,60 @@
             iframe.src = laporanUrl; // Load URL inside iframe
         }
 
+        // Function to toggle the menu
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.classList.toggle("active"); // Toggle the 'active' class
+        }
+
+        // Function to check user type and show/hide elements accordingly
+        function checkUserType() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const user = urlParams.get("user") || "";  // Default empty if user is not provided
+
+            const hamburger = document.getElementById("hamburger");
+            const bottomNav = document.getElementById("bottomNav");
+
+            // Logic to show/hide elements based on user type
+            if (user === "konsumen") {
+                // Hide both hamburger menu and bottom navigation
+                hamburger.style.display = "none";
+                bottomNav.style.display = "none";
+            } else if (user === "admin") {
+                // Show hamburger menu, hide bottom navigation
+                hamburger.style.display = "block";
+                bottomNav.style.display = "none";
+            } else if (user === "owner") {
+                // Show both hamburger menu and bottom navigation
+                hamburger.style.display = "block";
+                bottomNav.style.display = "flex";
+            } else {
+                // Default case: Hide both hamburger menu and bottom navigation
+                hamburger.style.display = "none";
+                bottomNav.style.display = "none";
+            }
+        }
+
         // Function to open something for Lifestyle
         function openLifestyle() {
             alert('Lifestyle button clicked! Menjalankan fungsi...');
             // Anda dapat menambahkan fungsi lain di sini, seperti membuka modal atau halaman khusus
         }
+
+        // Call checkUserType on window load
+        window.onload = function() {
+            checkUserType();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
+            const meja = urlParams.get("meja") || "default";  // Default value if not specified
+
+            // Generate the iframe URL with parameters
+            const iframe = document.getElementById("appsScriptIframe");
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
+            iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
+        };
     </script>
+
 </body>
 </html>
