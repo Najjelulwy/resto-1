@@ -239,11 +239,10 @@
     <a href="https://example.com/mall">
       <i class="fas fa-store"></i>
       <span>kasir</span>
-    </a>
-    <a href="https://example.com/reward">
-      <i class="fas fa-gem"></i>
-      <span>laporan</span>
-    </a>
+    <a id="laporanLink">
+          <i class="fas fa-gem"></i>
+          <span>laporan</span>
+         </a>
     <button onclick="openLifestyle()">
       <i class="fas fa-th-large"></i>
       <span>Menu</span>
@@ -256,6 +255,15 @@
       alert('Lifestyle button clicked! Menjalankan fungsi...');
       // Anda dapat menambahkan fungsi lain di sini, seperti membuka modal atau halaman khusus
     }
+
+     
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const items = urlParams.get("items") || "order";  // Default value if not specified
+    const laporanLink = document.getElementById("laporanLink");
+    laporanLink.href = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
+  };
+
   </script>
 </body>
 </html>
