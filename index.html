@@ -161,11 +161,11 @@
             <i class="fas fa-home"></i>
             <span>Beranda</span>
         </a>
-        <a href="https://example.com/beli-paket">
+        <a href="javascript:void(0);" id="restoLink">
             <i class="fas fa-shopping-bag"></i>
             <span>resto</span>
         </a>
-        <a href="javascript:void(0);" onclick="openkasir()">
+        <a href="javascript:void(0);" id="kasirLink">
             <i class="fas fa-store"></i>
             <span>kasir</span>
         </a>
@@ -188,16 +188,6 @@
             const laporanUrl = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
             const iframe = document.getElementById("appsScriptIframe");
             iframe.src = laporanUrl; // Load URL inside iframe
-        }
-   
-          function openkasir() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
-
-            const iframe = document.getElementById("appsScriptIframe");
-           const kasirUrl = `https://script.google.com/macros/s/AKfycbweri5OOWwmqnmbtBvFivshKwoDC35YGgofvgAUTIYmPXcoB2NsRKPyqB66z8o5nbkw/exec?items=${encodeURIComponent(items)}`;
-           iframe.src = kasirUrl; // Load URL inside iframe
-
         }
 
         // Function to toggle the menu
@@ -252,6 +242,18 @@
             const iframe = document.getElementById("appsScriptIframe");
             const scriptUrl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
             iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
+
+            // Set the links for 'resto' and 'kasir' buttons with the correct URLs
+            const restoLink = document.getElementById("restoLink");
+            const kasirLink = document.getElementById("kasirLink");
+
+            restoLink.onclick = function() {
+                iframe.src = `https://script.google.com/macros/s/AKfycbxwjyrE2fXiV9OujLxh2kwsvnNUV97T_KTNmxRdhFOhDEHWLnthGAP3l_W8d5i1P38o/exec?items=${encodeURIComponent(items)}`;
+            };
+
+            kasirLink.onclick = function() {
+                iframe.src = `https://script.google.com/macros/s/AKfycbweri5OOWwmqnmbtBvFivshKwoDC35YGgofvgAUTIYmPXcoB2NsRKPyqB66z8o5nbkw/exec?items=${encodeURIComponent(items)}`;
+            };
         };
     </script>
 </body>
