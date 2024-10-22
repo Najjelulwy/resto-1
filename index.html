@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed Google Apps Script with Parameters</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        
+         #appsScriptIframe {
+            width: 100%;
+            height: 810px;
+            border: none;
+            overflow: hidden;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            
+        }
+        .marquee {
+            position: absolute;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+            color: white;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+        /* QR Code style */
+        #qrcode {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 128px;
+            height: 128px;
+        }
+    
+       
+    /* Container for bottom navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px); /* Adds blur effect */
+    }
+    /* Each navigation item */
+    .bottom-nav a, .bottom-nav button {
+      text-align: center;
+      text-decoration: none;
+      color: #666;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    /* Styling for active item */
+    .bottom-nav a.active, .bottom-nav button.active {
+      color: #1d4ed8;
+    }
+    /* Icon size */
+    .bottom-nav i {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+       .hamburger {
+            margin-left : 5px;
+            margin-top : 15px;
+            position: absolute;
+            width: 30px;
+            cursor: pointer;
+            
+            display: inline-block;
+        }
+
+        .bar {
+            width: 50%;
+            height: 4px;
+            background-color: #333;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Menu styling (hidden by default) */
+        .menu {
+            position: fixed;
+            left: 0;
+            top: 40px;
+            width: 150px;
+            height: 100%;
+            background-color: grey;
+            color: white;
+            padding-top: 10px;
+            transform: translateX(-100%); /* Hide off-screen */
+            transition: transform 0.3s ease;
+        }
+
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu ul li {
+            padding: 3px;
+            text-align: left;
+        }
+
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+        }
+
+        .menu ul li a:hover {
+            background-color: #575757;
+        }
+
+        /* Class to show the menu */
+        .menu.active {
+            transform: translateX(0); /* Slide in the menu */
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee">copy right hafizkid 2024</div>
+      <!-- Hamburger Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu" id="menu">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+
+
+    <!-- Iframe for the Google Apps Script Web App -->
+    <iframe id="appsScriptIframe" src="" scrolling="no"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
+            const meja = urlParams.get("meja") || "default";  // Default value if not specified
+
+            // Generate the iframe URL with parameters
+            const iframe = document.getElementById("appsScriptIframe");
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
+            iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
+
+          // Generate the iframe URL with parameters
+          //  const laporanurl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
+         //   iframe.src = `${laporanurl}?items=${encodeURIComponent(items)}&user=${encodeURIComponent(meja)}`;
+
+
+        };
+  
+  
+    </script>
+  
+
+
+    <script>
+        let autoCloseTimeout;
+
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.classList.toggle("active"); // Toggle the 'active' class
+            
+            // If menu is active, set a timer to auto-close after 5 seconds (5000 ms)
+            if (menu.classList.contains("active")) {
+                resetAutoClose(); // Reset timer when clicked
+            }
+        }
+
+        function resetAutoClose() {
+            // Clear the previous timeout if it exists
+            clearTimeout(autoCloseTimeout);
+            
+            // Set a new timeout to close the menu after 5 seconds of inactivity
+            autoCloseTimeout = setTimeout(function() {
+                var menu = document.getElementById("menu");
+                menu.classList.remove("active");
+            }, 5000); // 5000 ms = 5 seconds
+        }
+
+        // Optional: Close the menu when user clicks outside of the menu
+        document.addEventListener('click', function(event) {
+            var menu = document.getElementById("menu");
+            var hamburger = document.querySelector(".hamburger");
+            
+            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+                menu.classList.remove("active");
+            }
+        });
+
+        // Optional: Reset the auto-close timer when hovering over the menu
+        document.getElementById("menu").addEventListener('mouseover', function() {
+            resetAutoClose();
+        });
+    </script>
+    
+    
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="https://example.com/beranda" class="active">
+      <i class="fas fa-home"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="https://example.com/beli-paket">
+      <i class="fas fa-shopping-bag"></i>
+      <span>resto</span>
+    </a>
+    <a href="https://example.com/mall">
+      <i class="fas fa-store"></i>
+      <span>kasir</span>
+    </a>
+    <a href="https://example.com/reward">
+      <i class="fas fa-gem"></i>
+      <span>laporan</span>
+    </a>
+    <button onclick="openLifestyle()">
+      <i class="fas fa-th-large"></i>
+      <span>Menu</span>
+    </button>
+  </div>
+
+  <script>
+    // Function to open something for Lifestyle
+    function openLifestyle() {
+      alert('Lifestyle button clicked! Menjalankan fungsi...');
+      // Anda dapat menambahkan fungsi lain di sini, seperti membuka modal atau halaman khusus
+    }
+  </script>
+</body>
+</html>
