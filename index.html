@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embed Google Apps Script with Parameters</title>
+    <title>laporan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
@@ -157,7 +157,7 @@
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav" id="bottomNav">
-        <a href="https://example.com/beranda" class="active">
+        <a href="javascript:void(0);" id="menulink">
             <i class="fas fa-home"></i>
             <span>Beranda</span>
         </a>
@@ -219,8 +219,8 @@
                 bottomNav.style.display = "flex";
             } else {
                 // Default case: Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
+                hamburger.style.display = "";
+                bottomNav.style.display = "";
             }
         }
 
@@ -246,6 +246,7 @@
             // Set the links for 'resto' and 'kasir' buttons with the correct URLs
             const restoLink = document.getElementById("restoLink");
             const kasirLink = document.getElementById("kasirLink");
+            const menuLink = document.getElementById("menuLink");
 
             restoLink.onclick = function() {
                 iframe.src = `https://script.google.com/macros/s/AKfycbxwjyrE2fXiV9OujLxh2kwsvnNUV97T_KTNmxRdhFOhDEHWLnthGAP3l_W8d5i1P38o/exec?items=${encodeURIComponent(items)}`;
@@ -253,6 +254,9 @@
 
             kasirLink.onclick = function() {
                 iframe.src = `https://script.google.com/macros/s/AKfycbzRBIQQP1auQ6WQNSUUwLAdO0IAJS9qMApPh7NEILqa6oRlZKagW8s83rftXFyPdqAzHg/exec?items=${encodeURIComponent(items)}`;
+            };
+            menulink.onclick = function() {
+                iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
             };
         };
     </script>
