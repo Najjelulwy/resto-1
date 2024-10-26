@@ -11,13 +11,13 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden; /* Disable scroll */
-            touch-action: none; /* Prevent touch scrolling on mobile */
+            overflow: hidden;
+            touch-action: none;
         }
 
         #appsScriptIframe {
             width: 100%;
-            height: 100vh; /* Full viewport height for the iframe */
+            height: 100vh;
             border: none;
         }
 
@@ -34,9 +34,8 @@
             100% { transform: translateX(200%); }
         }
 
-        /* Menu hamburger and bottom navigation */
         .hamburger, .bottom-nav {
-            display: none; /* Default hidden */
+            display: none;
         }
 
         .hamburger {
@@ -55,7 +54,6 @@
             transition: 0.4s;
         }
 
-        /* Menu styling (hidden by default) */
         .menu {
             position: fixed;
             left: 0;
@@ -65,7 +63,7 @@
             background-color: grey;
             color: white;
             padding-top: 10px;
-            transform: translateX(-100%); /* Hide off-screen */
+            transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
 
@@ -90,23 +88,21 @@
             background-color: #575757;
         }
 
-        /* Class to show the menu */
         .menu.active {
-            transform: translateX(0); /* Slide in the menu */
+            transform: translateX(0);
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+            background-color: rgba(255, 255, 255, 0.6);
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 10px 0;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px); /* Adds blur effect */
+            backdrop-filter: blur(10px);
         }
 
         .bottom-nav a, .bottom-nav button {
@@ -131,27 +127,37 @@
         .bottom-nav a.active, .bottom-nav button.active {
             color: #1d4ed8;
         }
-  /* Loading animation styling */
-        #loadingGif {
+
+        /* Animasi pembuka aplikasi */
+        #appLoadingGif {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
+            display: block; /* Displayed by default */
+            z-index: 1000;
+        }
+
+        /* Animasi loading untuk iframe */
+        #iframeLoadingGif {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
             z-index: 1000;
         }
     </style>
 </head>
 <body>
     <div class="marquee">copy right hafizkid 2024</div>
-    <!-- Hamburger Icon -->
+    
     <div class="hamburger" id="hamburger" onclick="toggleMenu()">
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
     </div>
 
-    <!-- Menu -->
     <div class="menu" id="menu">
         <ul>
             <li><a href="#">Home</a></li>
@@ -161,10 +167,20 @@
         </ul>
     </div>
 
-    <!-- Iframe for the Google Apps Script Web App -->
-    <iframe id="appsScriptIframe" src="" scrolling="no"></iframe>
+    <!-- Animasi pembuka aplikasi -->
+    <div id="appLoadingGif">
+        <img src="https://docs.google.com/thumbnail?sz=w800&id=1lGlnNaGjSM5YXGzmzTlCRo0VcavIfq2L" alt="Loading Data...">
 
-    <!-- Bottom Navigation -->
+    </div>
+
+    <!-- Animasi loading untuk iframe -->
+    <div id="iframeLoadingGif">
+        <img src="https://docs.google.com/thumbnail?sz=w800&id=1r_ljrcP7CoZQWDgW4fT6gDTxIBZXEtxb" alt="Loading App...">
+
+    </div>
+
+    <iframe id="appsScriptIframe" src="" scrolling="no" onload="hideLoadingGifs()"></iframe>
+
     <div class="bottom-nav" id="bottomNav">
         <a href="javascript:void(0);" id="menulink">
             <i class="fas fa-home"></i>
@@ -187,93 +203,55 @@
             <span>Menu</span>
         </button>
     </div>
-   <div id="loadingGif">
-        <img src="https://docs.google.com/thumbnail?sz=w800&id=1lGlnNaGjSM5YXGzmzTlCRo0VcavIfq2L" alt="Loading...">
-    </div>
-
-    <!-- Rest of your HTML structure -->
-
-    <iframe id="appsScriptIframe" src="" scrolling="no" onload="hideLoadingGif()"></iframe>
-
 
     <script>
-        // Function to load laporan link inside iframe
-        function openLaporan() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "warungku";  // Default to 'order' if not specified
-
-            const laporanUrl = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
-            const iframe = document.getElementById("appsScriptIframe");
-            iframe.src = laporanUrl; // Load URL inside iframe
+        function showIframeLoadingGif() {
+            document.getElementById("iframeLoadingGif").style.display = "block";
         }
 
-        // Function to toggle the menu
+        function hideLoadingGifs() {
+            document.getElementById("appLoadingGif").style.display = "none"; // Hide app loading gif on first load
+            document.getElementById("iframeLoadingGif").style.display = "none"; // Hide iframe loading gif
+        }
+
         function toggleMenu() {
             var menu = document.getElementById("menu");
-            menu.classList.toggle("active"); // Toggle the 'active' class
+            menu.classList.toggle("active");
         }
 
-        // Function to check user type and show/hide elements accordingly
-        function checkUserType() {
+        function openLaporan() {
+            showIframeLoadingGif();
             const urlParams = new URLSearchParams(window.location.search);
-            const user = urlParams.get("user") || "";  // Default empty if user is not provided
-
-            const hamburger = document.getElementById("hamburger");
-            const bottomNav = document.getElementById("bottomNav");
-
-            // Logic to show/hide elements based on user type
-            if (user === "konsumen") {
-                // Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
-            } else if (user === "admin") {
-                // Show hamburger menu, hide bottom navigation
-                hamburger.style.display = "block";
-                bottomNav.style.display = "none";
-            } else if (user === "owner") {
-                // Show both hamburger menu and bottom navigation
-                hamburger.style.display = "block";
-                bottomNav.style.display = "flex";
-            } else {
-                // Default case: Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
-            }
+            const items = urlParams.get("items") || "warungku";
+            const laporanUrl = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
+            document.getElementById("appsScriptIframe").src = laporanUrl;
         }
 
-        // Function to open something for Lifestyle
         function openLifestyle() {
             alert('Lifestyle button clicked! Menjalankan fungsi...');
-            // Anda dapat menambahkan fungsi lain di sini, seperti membuka modal atau halaman khusus
         }
 
-        // Call checkUserType on window load
         window.onload = function() {
-            checkUserType();
-
             const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "warungku";  // Default to 'order' if not specified
-            const meja = urlParams.get("meja") || "default";  // Default value if not specified
-
-            // Generate the iframe URL with parameters
+            const items = urlParams.get("items") || "warungku";
+            const meja = urlParams.get("meja") || "default";
             const iframe = document.getElementById("appsScriptIframe");
             const scriptUrl = "https://script.google.com/macros/s/AKfycbwa8KUrcwiOC5-5IrvseBFfctRfPLUuc1Pf316TLInkA2LebaqE9VYvSi__TjLTUXu2/exec";
+
             iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
 
-            // Set the links for 'resto' and 'kasir' buttons with the correct URLs
-            const restoLink = document.getElementById("restoLink");
-            const kasirLink = document.getElementById("kasirLink");
-            const menuLink = document.getElementById("menuLink");
-
-            restoLink.onclick = function() {
-                 iframe.src = `https://script.google.com/macros/s/AKfycbwFpqA_UMz2Qj-5Vz0uxtpfMkolMnmZNCE08Wjw6rWeLnNzmdAaFIRnwfojZ9no3tEe/exec?items=${encodeURIComponent(items)}`;
-
+            document.getElementById("restoLink").onclick = function() {
+                showIframeLoadingGif();
+                iframe.src = `https://script.google.com/macros/s/AKfycbwFpqA_UMz2Qj-5Vz0uxtpfMkolMnmZNCE08Wjw6rWeLnNzmdAaFIRnwfojZ9no3tEe/exec?items=${encodeURIComponent(items)}`;
             };
 
-            kasirLink.onclick = function() {
+            document.getElementById("kasirLink").onclick = function() {
+                showIframeLoadingGif();
                 iframe.src = `https://script.google.com/macros/s/AKfycbzRBIQQP1auQ6WQNSUUwLAdO0IAJS9qMApPh7NEILqa6oRlZKagW8s83rftXFyPdqAzHg/exec?items=${encodeURIComponent(items)}`;
             };
-            menulink.onclick = function() {
+
+            document.getElementById("menulink").onclick = function() {
+                showIframeLoadingGif();
                 iframe.src = `${scriptUrl}?items=${encodeURIComponent(items)}&meja=${encodeURIComponent(meja)}`;
             };
         };
