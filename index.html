@@ -131,6 +131,15 @@
         .bottom-nav a.active, .bottom-nav button.active {
             color: #1d4ed8;
         }
+  /* Loading animation styling */
+        #loadingGif {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -178,12 +187,20 @@
             <span>Menu</span>
         </button>
     </div>
+   <div id="loadingGif">
+        <img src="https://docs.google.com/thumbnail?sz=w800&id=1lGlnNaGjSM5YXGzmzTlCRo0VcavIfq2L" alt="Loading...">
+    </div>
+
+    <!-- Rest of your HTML structure -->
+
+    <iframe id="appsScriptIframe" src="" scrolling="no" onload="hideLoadingGif()"></iframe>
+
 
     <script>
         // Function to load laporan link inside iframe
         function openLaporan() {
             const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
+            const items = urlParams.get("items") || "warungku";  // Default to 'order' if not specified
 
             const laporanUrl = `https://script.google.com/macros/s/AKfycbxsJtZuw5OngU5ilZuJP1Ebz--GwR5ekCGwNVZYVRBtVS_Bx7gYET_0hhVSkq9_cDco-Q/exec?items=${encodeURIComponent(items)}`;
             const iframe = document.getElementById("appsScriptIframe");
@@ -219,8 +236,8 @@
                 bottomNav.style.display = "flex";
             } else {
                 // Default case: Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
+                hamburger.style.display = "";
+                bottomNav.style.display = "";
             }
         }
 
@@ -235,7 +252,7 @@
             checkUserType();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const items = urlParams.get("items") || "order";  // Default to 'order' if not specified
+            const items = urlParams.get("items") || "warungku";  // Default to 'order' if not specified
             const meja = urlParams.get("meja") || "default";  // Default value if not specified
 
             // Generate the iframe URL with parameters
@@ -249,7 +266,8 @@
             const menuLink = document.getElementById("menuLink");
 
             restoLink.onclick = function() {
-                iframe.src = 'https://script.google.com/macros/s/AKfycbwFpqA_UMz2Qj-5Vz0uxtpfMkolMnmZNCE08Wjw6rWeLnNzmdAaFIRnwfojZ9no3tEe/exec?items=${encodeURIComponent(items)}`;
+                 iframe.src = `https://script.google.com/macros/s/AKfycbwFpqA_UMz2Qj-5Vz0uxtpfMkolMnmZNCE08Wjw6rWeLnNzmdAaFIRnwfojZ9no3tEe/exec?items=${encodeURIComponent(items)}`;
+
             };
 
             kasirLink.onclick = function() {
