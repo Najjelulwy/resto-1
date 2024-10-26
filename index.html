@@ -128,17 +128,15 @@
             color: #1d4ed8;
         }
 
-        /* Animasi pembuka aplikasi */
         #appLoadingGif {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            display: block; /* Displayed by default */
+            display: block;
             z-index: 1000;
         }
 
-        /* Animasi loading untuk iframe */
         #iframeLoadingGif {
             position: fixed;
             top: 50%;
@@ -167,13 +165,10 @@
         </ul>
     </div>
 
-    <!-- Animasi pembuka aplikasi -->
     <div id="appLoadingGif">
-        <img src="https://docs.google.com/thumbnail?sz=w800&id=1lGlnNaGjSM5YXGzmzTlCRo0VcavIfq2L" alt="Loading Data...">
-
+<img src="https://docs.google.com/thumbnail?sz=w800&id=1lGlnNaGjSM5YXGzmzTlCRo0VcavIfq2L" alt="Loading Data...">
     </div>
 
-    <!-- Animasi loading untuk iframe -->
     <div id="iframeLoadingGif">
         <img src="https://docs.google.com/thumbnail?sz=w800&id=1r_ljrcP7CoZQWDgW4fT6gDTxIBZXEtxb" alt="Loading App...">
 
@@ -210,42 +205,14 @@
         }
 
         function hideLoadingGifs() {
-            document.getElementById("appLoadingGif").style.display = "none"; // Hide app loading gif on first load
-            document.getElementById("iframeLoadingGif").style.display = "none"; // Hide iframe loading gif
+            document.getElementById("appLoadingGif").style.display = "none";
+            document.getElementById("iframeLoadingGif").style.display = "none";
         }
 
         function toggleMenu() {
             var menu = document.getElementById("menu");
             menu.classList.toggle("active");
         }
-            // Function to check user type and show/hide elements accordingly
-        function checkUserType() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const user = urlParams.get("user") || "";  // Default empty if user is not provided
-
-            const hamburger = document.getElementById("hamburger");
-            const bottomNav = document.getElementById("bottomNav");
-
-            // Logic to show/hide elements based on user type
-            if (user === "konsumen") {
-                // Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
-            } else if (user === "admin") {
-                // Show hamburger menu, hide bottom navigation
-                hamburger.style.display = "block";
-                bottomNav.style.display = "none";
-            } else if (user === "owner") {
-                // Show both hamburger menu and bottom navigation
-                hamburger.style.display = "block";
-                bottomNav.style.display = "flex";
-            } else {
-                // Default case: Hide both hamburger menu and bottom navigation
-                hamburger.style.display = "none";
-                bottomNav.style.display = "none";
-            }
-        }
-
 
         function openLaporan() {
             showIframeLoadingGif();
@@ -259,7 +226,31 @@
             alert('Lifestyle button clicked! Menjalankan fungsi...');
         }
 
+        function checkUserType() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const user = urlParams.get("user") || "";  // Default empty if user is not provided
+
+            const hamburger = document.getElementById("hamburger");
+            const bottomNav = document.getElementById("bottomNav");
+
+            if (user === "konsumen") {
+                hamburger.style.display = "none";
+                bottomNav.style.display = "none";
+            } else if (user === "admin") {
+                hamburger.style.display = "block";
+                bottomNav.style.display = "none";
+            } else if (user === "owner") {
+                hamburger.style.display = "block";
+                bottomNav.style.display = "flex";
+            } else {
+                hamburger.style.display = "none";
+                bottomNav.style.display = "none";
+            }
+        }
+
         window.onload = function() {
+            checkUserType(); // Check user type and adjust visibility
+
             const urlParams = new URLSearchParams(window.location.search);
             const items = urlParams.get("items") || "warungku";
             const meja = urlParams.get("meja") || "default";
