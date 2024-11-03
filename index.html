@@ -200,6 +200,10 @@
     </div>
 
     <script>
+document.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+}, { passive: false });
+        
         function showIframeLoadingGif() {
             document.getElementById("iframeLoadingGif").style.display = "block";
         }
